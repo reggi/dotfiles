@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Function to calculate relative path from $1 to $2
+relative_path() {
+  local source="$1"
+  local target="$2"
+  local common_part="$source"
+  local result=""
+
+  while [ "${target#$common_part}" = "${target}" ]; do
+    common_part=$(dirname "$common_part")
+    result="../${result}"
+  done
+
+  if [[ "$common_part" == "." ]]; then
+    # Directly below, use the given path
+    result="$result${target}"
+  else
+    result="${result}${target#$common_part/}"
+  fi
+  echo "$result"
+}
+
 # Ensure 'jq' is installed
 if ! command -v jq &>/dev/null; then
   echo "Error: 'jq' is required but not installed. Please install 'jq' to use this script."
@@ -47,8 +68,8 @@ if [ ! -d "$2" ]; then
   exit 1
 fi
 
-src=$(realpath "$1")
-dest=$(realpath "$2")
+src="$1"
+dest="$2"
 
 # Loop through each directory in the source folder
 for package_dir in "$src"/*; do
@@ -76,13 +97,17 @@ for package_dir in "$src"/*; do
         continue
       fi
 
-      src_file=$(realpath "$package_dir/$main_file")
+      # Calculate relative path
+      rel_path=$(relative_path "$dest" "$package_dir/$main_file")
       dest_link="$dest/$package_name"
 
+      # Ensure destination link does not have double slashes
+      dest_link=$(echo "$dest_link" | sed 's://*:/:g')
+
       if [ "$dry_run" = true ]; then
-        echo "Would link '$src_file' to '$dest_link'"
+        echo "Would link '$rel_path' to '$dest_link'"
       else
-        ln -sf "$src_file" "$dest_link"
+        ln -sf "$rel_path" "$dest_link"
         echo "Linked '$package_name' to '$dest_link'"
       fi
     else
