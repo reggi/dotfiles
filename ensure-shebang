@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ensure-shebang"
+  echo "This script checks all files in the current directory for a shebang (#!) on the first line."
+  exit 0
+fi
+
+for file in *; do
+  if [[ -f "$file" ]]; then
+    if ! head -n 1 "$file" | grep -q "^#!"; then
+      echo "file $file does not have a shebang"
+      exit 1
+    fi
+  fi
+done
+
+echo "all files have a shebang"

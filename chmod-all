@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: chmod-all"
+  echo "This script makes all files in the current directory executable."
+  exit 0
+fi
+
+dirname=$(dirname "$(realpath "$0")")
+find "$dirname" -type f -exec chmod +x {} \;
