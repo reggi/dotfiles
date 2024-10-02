@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: wifiqr [--help]"
+  echo "Opens up a QR code for the current wifi network"
+  exit 0
+fi
+
+wifi_info=$(wificreds)
+network=$(echo "$wifi_info" | grep -oE 'S:[^;]+' | cut -d':' -f2)
+password=$(echo "$wifi_info" | grep -oE 'P:[^;]+' | cut -d':' -f2)
+qr_code=$(mkqr "$wifi_info")
+
+magick "$qr_code" -resize 500x500 -gravity south -splice 0x20 -pointsize 18 -weight Bold -annotate +0+12 "network: $network\npass: $password" "$qr_code"
+
+echo "$qr_code" | popen

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "$1" == "--help" ]; then
+  echo "Usage: link-this [--help]"
+  echo "Links all packages in the ./packages directory to the current directory."
+  exit 0
+fi
+
+SCRIPT_DIR=$(dirname "$0")
+link-packages "$SCRIPT_DIR/packages" "$SCRIPT_DIR/"

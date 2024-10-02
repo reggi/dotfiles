@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: wificreds"
+  echo "Prints the wifi output qr format"
+  exit 0
+fi
+
+network=$(networksetup -getairportnetwork en0 | awk -F ': ' '{print $2}' | tr -d '\n')
+password=$(security find-generic-password -a "$network" -w | tr -d '\n')
+
+wifiConfig="WIFI:S:${network};T:WPA;P:${password};;"
+
+echo "$wifiConfig"

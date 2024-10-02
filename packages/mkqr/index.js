@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import * as QRCode from 'qrcode';
 import { createInterface } from 'readline';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const args = process.argv.slice(2);
 let outputPath = '';
@@ -16,12 +18,14 @@ const filteredArgs = args.filter((arg, i) => {
 
 const input = filteredArgs.join(' ');
 
-if (!outputPath.endsWith('.png')) {
+if (!outputPath) {
+  outputPath = join(tmpdir(), 'qr-code.png');
+} else if (!outputPath.endsWith('.png')) {
   outputPath += '.png';
 }
 
-if (showHelp || !outputPath) {
-  console.log('Usage: mkqr --out <file.png> <input> [--help]');
+if (showHelp) {
+  console.log('Usage: mkqr [<input>] [--out <file.png>] [--help]');
   console.log('Generates a QR Code from the provided input (also pipable)');
   process.exit(showHelp ? 0 : 1);
 }
@@ -34,9 +38,9 @@ const generateQR = async (data) => {
         light: '#FFF'  // White background
       },
     });
-    console.log(`QR Code generated at ${outputPath}`);
+    console.log(outputPath)
   } catch (error) {
-    console.error('Failed to generate QR Code:', error);
+    // noop
   }
 };
 

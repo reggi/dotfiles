@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: popen [--help]"
+  echo "Just like open but allows for piping"
+  exit 0
+fi
+
+# Read input from the pipe or arguments
+if [ -t 0 ]; then
+  # No input from pipe, use arguments
+  for file in "$@"; do
+    open "$file"
+  done
+else
+  # Input from pipe
+  while IFS= read -r file; do
+    open "$file"
+  done
+fi
