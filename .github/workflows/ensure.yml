@@ -24,3 +24,6 @@ jobs:
 
     - name: Run ensure-exec script
       run: ./ensure-exec
+
+    - name: Run ensure-help script
+      run: ./ensure-help

@@ -1,16 +1,28 @@
 #!/bin/bash
 
+# Help option handling
 if [[ "$1" == "--help" ]]; then
   echo "Usage: ensure-usage [--help]"
-  echo "This script checks a script has usage and script name matches file name."
+  echo "This script checks that each script in the current directory contains a 'Usage: filename' pattern."
   exit 0
 fi
 
+fail=0 # Flag to track if any file fails the check
+
+# Check all files in the current directory
 for file in *; do
   if [[ -f "$file" ]]; then
+    # Check if the file contains the required usage pattern
     if ! grep -q "Usage: $file" "$file"; then
       echo "Error: $file does not contain the required usage information."
-      exit 1
+      fail=1 # Set fail flag on error
     fi
+  else
+    echo "$file is not a regular file."
   fi
 done
+
+# Exit with error if any file failed the check
+if [[ $fail -eq 1 ]]; then
+  exit 1
+fi

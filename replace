@@ -1,0 +1,33 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage: replace <MATCH> <REPLACE> [<STRING>]"
+  echo "Wrapper around sed to replace text."
+  echo "ex. echo love | replace e en"
+  echo "ex. replace b h bugs"
+  exit 1
+}
+
+input=""
+MATCH=$1
+REPLACE=$2
+STRING=$3
+
+if [[ -z "${MATCH}" ]]; then
+  usage
+fi
+if [[ -z "${REPLACE}" ]]; then
+  usage
+fi
+
+if [[ -p /dev/stdin ]]; then
+  input="$(cat -)"
+else
+  input="$STRING"
+fi
+
+if [[ -z "${input}" ]]; then
+  usage
+fi
+
+sed -E -e "s/$1/$2/g" <<<"$input"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == "--help" ]]; then
-  echo "Usage: dotfiles-installed [--help]"
+  echo "Usage: install [--help]"
   echo "This script checks if the directory '~/Documents/GitHub/dotfiles' is in the PATH."
   echo "If not, it provides instructions to add it to the PATH."
   exit 0
@@ -20,4 +20,3 @@ else
   fi
   exit 1
 fi
-Usage: install

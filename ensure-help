@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ensure-help [--help]"
+  echo "Ensures that all executables in the current directory have help output."
+  exit 0
+fi
+
+for cmd in *; do
+  if [[ -f "$cmd" && -x "$cmd" ]]; then
+    output=$("$cmd" --help 2>&1)
+    match="Usage: $cmd"
+    if [[ "$output" == "$match"* ]]; then
+      # echo "$cmd: Help output starts with '$match'"
+      :
+    else
+      echo "$cmd: Help output does not start with '$match'"
+      exit 1
+    fi
+  else
+    echo "$cmd: Not an executable file"
+  fi
+done
