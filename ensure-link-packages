@@ -11,3 +11,4 @@ git diff --quiet || {
   echo "Error: Uncommitted changes detected after running ensure-link."
   exit 1
 }
+git diff
