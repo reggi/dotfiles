@@ -8,7 +8,7 @@ fi
 
 for cmd in *; do
   if [[ -f "$cmd" && -x "$cmd" ]]; then
-    output=$("$cmd" --help 2>&1)
+    output=$("./$cmd" --help 2>&1)
     match="Usage: $cmd"
     if [[ "$output" == "$match"* ]]; then
       # echo "$cmd: Help output starts with '$match'"
