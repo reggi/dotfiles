@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == "--help" ]]; then
-  echo "Usage: chmod-all [--help]"
+  echo "Usage: exec-all [--help]"
   echo "This script makes all files in the current directory executable."
   exit 0
 fi

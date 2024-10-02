@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ensure-usage [--help]"
+  echo "This script checks a script has usage and script name matches file name."
+  exit 0
+fi
+
+for file in *; do
+  if [[ -f "$file" ]]; then
+    if ! grep -q "Usage: $file" "$file"; then
+      echo "Error: $file does not contain the required usage information."
+      exit 1
+    fi
+  fi
+done

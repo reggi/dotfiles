@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Check for --help option
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ensure-exec [--help]"
+  echo "Check if all files in the current directory are executable."
+  exit 0
+fi
+
+# Iterate over all files in the current directory
+for file in *; do
+  # Check if it is a file (not a directory)
+  if [ -f "$file" ]; then
+    # Check if the file is executable
+    if [ ! -x "$file" ]; then
+      echo "$file is not executable"
+      exit 1
+    fi
+  fi
+done
+
+echo "All files are executable"

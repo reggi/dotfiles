@@ -1,4 +1,4 @@
-name: Run Ensure Shebang
+name: Run Ensure Commands
 
 on:
   push:
@@ -18,3 +18,9 @@ jobs:
 
     - name: Run ensure-shebang script
       run: ./ensure-shebang
+
+    - name: Run ensure-usage script
+      run: ./ensure-usage
+
+    - name: Run ensure-exec script
+      run: ./ensure-exec
