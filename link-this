@@ -6,5 +6,4 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-SCRIPT_DIR=$(dirname "$0")
-link-packages "$SCRIPT_DIR/packages" "$SCRIPT_DIR/"
+link-packages ./packages ./
