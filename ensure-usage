@@ -18,7 +18,7 @@ for file in *; do
       fail=1 # Set fail flag on error
     fi
   else
-    echo "$file is not a regular file."
+    :
   fi
 done
 

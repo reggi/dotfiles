@@ -5,7 +5,7 @@ usage() {
   echo "Wrapper around sed to replace text."
   echo "ex. echo love | replace e en"
   echo "ex. replace b h bugs"
-  exit 1
+  exit 0
 }
 
 input=""

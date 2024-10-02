@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Check if the correct number of arguments is provided
+if [ "$#" -eq 0 ] || [ "$1" == "--help" ]; then
+  echo "Usage: rename-dated <file> [--help]"
+  echo "Rename a file or directory with the creation date as a prefix."
+  exit 0
+fi
+
+# Get the file or directory path
+FILE_PATH="$1"
+
+# Check if the file or directory exists
+if [ ! -e "$FILE_PATH" ]; then
+  echo "Error: File or directory does not exist."
+  exit 1
+fi
+
+# Get the creation date in the format YYYY-MM-DD
+CREATION_DATE=$(stat -f "%SB" -t "%Y-%m-%d" "$FILE_PATH")
+
+# Get the base name of the file or directory
+BASE_NAME=$(basename "$FILE_PATH")
+
+# Extract the file extension if it exists
+EXTENSION="${BASE_NAME##*.}"
+if [ "$BASE_NAME" == "$EXTENSION" ]; then
+  EXTENSION=""
+else
+  EXTENSION=".$EXTENSION"
+fi
+
+# Remove the extension from the base name
+BASE_NAME="${BASE_NAME%.*}"
+
+# Convert the base name to lowercase and replace symbols with hyphens
+NEW_NAME=$(echo "$BASE_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+
+# Create the new name with the date prefix and extension
+NEW_FILE_PATH="$(dirname "$FILE_PATH")/${CREATION_DATE}-${NEW_NAME}${EXTENSION}"
+
+mv "$FILE_PATH" "$NEW_FILE_PATH"

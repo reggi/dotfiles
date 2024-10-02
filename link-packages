@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# Ensure 'jq' is installed
+if ! command -v jq &>/dev/null; then
+  echo "Error: 'jq' is required but not installed. Please install 'jq' to use this script."
+  exit 1
+fi
+
+# Handle '--help' option
+if [ "$#" -eq 0 ] || [ "$1" == "--help" ]; then
+  echo "Usage: link-packages <src-folder> <dest-folder> [--dry-run]"
+  echo "This script creates symbolic links for the main files of packages in the source folder to the destination folder."
+  echo "Use --dry-run to see what would be done without making any changes."
+  exit 0
+fi
+
+dry_run=false
+args=()
+
+# Check for --dry-run flag in any position and remove it from arguments
+for arg in "$@"; do
+  if [ "$arg" == "--dry-run" ]; then
+    dry_run=true
+  else
+    args+=("$arg")
+  fi
+done
+
+# Replace positional parameters with the new arguments
+set -- "${args[@]}"
+
+# Ensure both source and destination folders are provided
+if [ "$#" -lt 2 ]; then
+  echo "Error: Source and destination folders are required."
+  echo "Usage: ensure-link <src-folder> <dest-folder> [--dry-run]"
+  exit 1
+fi
+
+# Check if source and destination directories exist
+if [ ! -d "$1" ]; then
+  echo "Error: Source directory '$1' does not exist."
+  exit 1
+fi
+
+if [ ! -d "$2" ]; then
+  echo "Error: Destination directory '$2' does not exist."
+  exit 1
+fi
+
+src=$(realpath "$1")
+dest=$(realpath "$2")
+
+# Loop through each directory in the source folder
+for package_dir in "$src"/*; do
+  if [ -d "$package_dir" ]; then
+    package_json="$package_dir/package.json"
+
+    # Check if package.json exists
+    if [ -f "$package_json" ]; then
+      # Extract the package name and main script path
+      package_name=$(jq -r '.name // empty' "$package_json")
+      main_file=$(jq -r '.main // "index.js"' "$package_json")
+
+      if [ -z "$package_name" ]; then
+        echo "Warning: Package in '$package_dir' has no 'name' field. Skipping."
+        continue
+      fi
+
+      # Handle cases where main is not specified (default to index.js)
+      if [ "$main_file" = "null" ] || [ -z "$main_file" ]; then
+        main_file="index.js"
+      fi
+
+      if [ ! -f "$package_dir/$main_file" ]; then
+        echo "Warning: Main file '$main_file' does not exist in '$package_dir'. Skipping."
+        continue
+      fi
+
+      src_file=$(realpath "$package_dir/$main_file")
+      dest_link="$dest/$package_name"
+
+      if [ "$dry_run" = true ]; then
+        echo "Would link '$src_file' to '$dest_link'"
+      else
+        ln -sf "$src_file" "$dest_link"
+        echo "Linked '$package_name' to '$dest_link'"
+      fi
+    else
+      echo "No package.json found in '$package_dir'"
+    fi
+  fi
+done

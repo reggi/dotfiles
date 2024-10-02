@@ -16,14 +16,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Add repository to PATH
+      run: echo "$(pwd)/bin" >> $GITHUB_PATH
+
     - name: Run ensure-shebang script
-      run: ./ensure-shebang
+      run: ensure-shebang
 
     - name: Run ensure-usage script
-      run: ./ensure-usage
+      run: ensure-usage
 
     - name: Run ensure-exec script
-      run: ./ensure-exec
+      run: ensure-exec
 
     - name: Run ensure-help script
-      run: ./ensure-help
+      run: ensure-help
+
+    - name: Run ensure-link script
+      run: ensure-link-this
+        

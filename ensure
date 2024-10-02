@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Check for --help option
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: ensure [--help]"
+  echo "Runs all ensure commands"
+  exit 0
+fi
+
+ensure-exec &&
+  ensure-help &&
+  ensure-shebang &&
+  ensure-usage &&
+  ensure-link-this

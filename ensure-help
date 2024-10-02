@@ -19,9 +19,9 @@ for cmd in *; do
       exit 1
     fi
   elif [[ -L "$cmd" ]]; then
-    echo "$cmd: Skipping symbolic link"
+    :
   else
-    echo "$cmd: Not an executable file"
+    :
   fi
 done
 

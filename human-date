@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: human-date"
+  echo "Prints the current date and time in human-readable format."
+  exit 0
+fi
+
+date +'%Y-%m-%d %I:%M%p' | tr '[:upper:]' '[:lower:]'
