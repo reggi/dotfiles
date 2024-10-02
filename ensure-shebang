@@ -15,4 +15,4 @@ for file in *; do
   fi
 done
 
-echo "all files have a shebang"
+echo "ok"

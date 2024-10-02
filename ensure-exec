@@ -19,4 +19,4 @@ for file in *; do
   fi
 done
 
-echo "All files are executable"
+echo "ok"

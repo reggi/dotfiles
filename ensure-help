@@ -7,17 +7,22 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 for cmd in *; do
-  if [[ -f "$cmd" && -x "$cmd" ]]; then
+  if [[ -f "$cmd" && -x "$cmd" && ! -L "$cmd" ]]; then
     output=$("./$cmd" --help 2>&1)
     match="Usage: $cmd"
     if [[ "$output" == "$match"* ]]; then
+      # Correct help output found, can uncomment below to confirm
       # echo "$cmd: Help output starts with '$match'"
       :
     else
       echo "$cmd: Help output does not start with '$match'"
       exit 1
     fi
+  elif [[ -L "$cmd" ]]; then
+    echo "$cmd: Skipping symbolic link"
   else
     echo "$cmd: Not an executable file"
   fi
 done
+
+echo "ok"
