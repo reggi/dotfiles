@@ -31,6 +31,3 @@ jobs:
     - name: Run ensure-help script
       run: ensure-help
 
-    - name: Run ensure-link script
-      run: ensure-link-packages
-        

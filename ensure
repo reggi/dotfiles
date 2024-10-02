@@ -10,5 +10,4 @@ fi
 ensure-exec &&
   ensure-help &&
   ensure-shebang &&
-  ensure-usage &&
-  ensure-link-this
+  ensure-usage
