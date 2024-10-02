@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == "--help" ]]; then
-  echo "Usage: ensure-shebang"
+  echo "Usage: ensure-shebang [--help]"
   echo "This script checks all files in the current directory for a shebang (#!) on the first line."
   exit 0
 fi

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: dotfiles-installed [--help]"
+  echo "This script checks if the directory '~/Documents/GitHub/dotfiles' is in the PATH."
+  echo "If not, it provides instructions to add it to the PATH."
+  exit 0
+fi
+
+if [[ ":$PATH:" == *":$HOME/Documents/GitHub/dotfiles:"* ]]; then
+  echo "The directory is in the PATH."
+else
+  echo "Install reggi/dotfiles by Add it by running:"
+  if [[ "$SHELL" == "/bin/zsh" ]]; then
+    echo 'export PATH="$HOME/Documents/GitHub/dotfiles:$PATH"' >>~/.zshrc
+    source ~/.zshrc
+  else
+    echo 'export PATH="$HOME/Documents/GitHub/dotfiles:$PATH"' >>~/.bashrc
+    source ~/.bashrc
+  fi
+  exit 1
+fi

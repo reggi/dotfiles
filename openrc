@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: openrc [--help]"
+  echo "Open the appropriate shell configuration file based on the current shell."
+  exit 0
+fi
+
+if [[ "$SHELL" == "/bin/zsh" ]]; then
+  code ~/.zshrc
+else
+  code ~/.bashrc
+fi
